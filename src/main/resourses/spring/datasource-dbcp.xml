@@ -10,7 +10,7 @@
 	<context:property-placeholder location="jdbc.properties" />
 	
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-		<property name="jdbc:mysql://localhost:3306/warehouses">
+		<property name="jdbc:mysql://localhost:3306/Mysql">
 			<value>${jdbc.url}</value>
 		</property>
 		<property name="root">

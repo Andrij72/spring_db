@@ -11,11 +11,13 @@
 	
 	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
 		<constructor-arg type="javax.sql.DataSource" ref="dataSource"/>
-	</bean>	
+	</bean>
 	
 	<bean id="namedParameterJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
 		<constructor-arg type="javax.sql.DataSource" ref="dataSource"/>
 	</bean>
-
+	<bean id="providerDaoImpl" class="com.myapp.impl.ProviderDaoImpl">
+		<property name="message"  value="Providers select byId..."/>
+	</bean>
 	<context:component-scan base-package="com.myapp" />
 </beans>

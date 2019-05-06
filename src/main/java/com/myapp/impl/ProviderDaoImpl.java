@@ -19,8 +19,17 @@ import java.util.Set;
 
 @Component
 public class ProviderDaoImpl implements ProviderDao {
-	protected final Log logger = LogFactory.getLog(getClass());
-	
+	private static final Log logger = LogFactory.getLog(ProviderDaoImpl.class);
+
+	@InjectRandomInt(min = 2, max = 7)
+	private int repeat;
+
+	private String message;
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
 	@Autowired
 	private SelectAllProviders selectAllProviders;
 	@Autowired
@@ -35,7 +44,23 @@ public class ProviderDaoImpl implements ProviderDao {
 	private UpdateProvider updateProvider;
 	@Autowired
 	private DeleteProvider deleteProvider;
-	
+
+	public int getRepeat() {
+		return repeat;
+	}
+
+	public void setRepeat(int repeat) {
+		this.repeat = repeat;
+	}
+
+	public SelectAllProviders getSelectAllProviders() {
+		return selectAllProviders;
+	}
+
+	public void setSelectAllProviders(SelectAllProviders selectAllProviders) {
+		this.selectAllProviders = selectAllProviders;
+	}
+
 	public List<Provider> findAll() {
 		return selectAllProviders.execute();
 	}
@@ -49,11 +74,15 @@ public class ProviderDaoImpl implements ProviderDao {
 		} catch (IndexOutOfBoundsException e) {
 			logger.info("Provider with id " + id + " was not found");
 		}
+
+		for (int i =0; i< repeat; i++){
+			System.out.println(" message" + message);
+		}
 		return provider;
 	}
 
 	public Long insert(Provider provider) {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
+		Map<String, Object> paramMap = new HashMap<>();
 		paramMap.put(InsertProvider.NAME_PARAMETER, provider.getName());
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		insertProvider.updateByNamedParam(paramMap, keyHolder);
@@ -70,7 +99,6 @@ public class ProviderDaoImpl implements ProviderDao {
 		provider.setId(keyHolder.getKey().longValue());
 		logger.info("New provider inserted with id: " + provider.getId());
 		
-		// Пакетна вставка для items
 		Set<Item> items = provider.getItems();
 		if (items != null) {
 			for (Item item : items) {

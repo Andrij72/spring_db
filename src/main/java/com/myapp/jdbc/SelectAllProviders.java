@@ -13,7 +13,7 @@ import java.sql.SQLException;
 @Component
 public class SelectAllProviders extends MappingSqlQuery<Provider> {
 	private static final String SQL_SELECT_ALL_PROVIDERS = "SELECT * FROM " + Provider.TABLE_NAME;
-	
+
 	@Autowired
 	private DataSource dataSource;
 

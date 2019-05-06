@@ -1,9 +1,0 @@
-USE Mysql;
-
-DELIMITER //
-CREATE FUNCTION getNameById(in_id INT)
-	RETURNS VARCHAR(120)
-BEGIN
-	RETURN (SELECT name FROM providers WHERE id = in_id);
-END //
-DELIMITER ;
