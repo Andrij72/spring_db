@@ -15,7 +15,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,89 +24,87 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.myapp.dao.ItemDao.SQL_FIND_ALL;
-
-@Component
+@Repository
 public class WarehouseDaoImpl implements WarehouseDao {
-	protected final Log logger = LogFactory.getLog(getClass());
-	
-	@Autowired
-	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    protected final Log logger = LogFactory.getLog(getClass());
 
-	public List<Warehouse> findAll() {
-		return namedParameterJdbcTemplate.query(SQL_FIND_ALL, new RowMapper<Warehouse>() {
-			public Warehouse mapRow(ResultSet rs, int rowNum) throws SQLException {
-				Warehouse warehouse = new Warehouse();
-				warehouse.setId(rs.getLong(Warehouse.ID_COLUMN));
-				warehouse.setAddress(rs.getString(Warehouse.ADDRESS_COLUMN));
-				return warehouse;
-			}
-		});
-	}
+    @Autowired
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-	public List<Warehouse> findWarehousesWithItems() {
-		return namedParameterJdbcTemplate.query(SQL_FIND_WAREHOUSES_WITH_ITEMS, new ResultSetExtractor<List<Warehouse>>() {
-			public List<Warehouse> extractData(ResultSet rs) throws SQLException, DataAccessException {
-				Map<Long, Warehouse> map = new HashMap<Long, Warehouse>();
-				Warehouse warehouse = null;
-				while (rs.next()) {
-					Long id = rs.getLong(Warehouse.ID_COLUMN);
-					warehouse = map.get(id);
-					if (warehouse == null) {
-						warehouse = new Warehouse();
-						warehouse.setId(id);
-						warehouse.setAddress(rs.getString(Warehouse.ADDRESS_COLUMN));
-						map.put(id, warehouse);
-					}
-					Long itemId = rs.getLong(Item.ALIAS_ID_ITEM_COLUMN);
-					if (itemId != null) {
-						Item item = new Item();
-						item.setId(itemId);
-						item.setName(rs.getString(Item.NAME_COLUMN));
-						item.setWarehouseId(rs.getLong(Item.WAREHOUSE_ID_COLUMN));
-						warehouse.addItem(item);
-					}
-				}
-				return new ArrayList<Warehouse>(map.values());
-			}
-		});
-	}
+    public List<Warehouse> findAll() {
+        return namedParameterJdbcTemplate.query(SQL_FIND_ALL, new RowMapper<Warehouse>() {
+            public Warehouse mapRow(ResultSet rs, int rowNum) throws SQLException {
+                Warehouse warehouse = new Warehouse();
+                warehouse.setId(rs.getLong(Warehouse.ID_COLUMN));
+                warehouse.setAddress(rs.getString(Warehouse.ADDRESS_COLUMN));
+                return warehouse;
+            }
+        });
+    }
 
-	public Warehouse findById(Long id) {
-		SqlParameterSource sqlParameterSource = new MapSqlParameterSource(WarehouseDao.ID_PARAMETER, id);
-		Warehouse warehouse = null;
-		try {
-			warehouse = namedParameterJdbcTemplate.queryForObject(PARAMETERIZED_SQL_FIND_BY_ID, sqlParameterSource, new RowMapper<Warehouse>() {
-				public Warehouse mapRow(ResultSet rs, int arg) throws SQLException {
-					Warehouse warehouse = new Warehouse();
-					warehouse.setId(rs.getLong(Warehouse.ID_COLUMN));
-					warehouse.setAddress(rs.getString(Warehouse.ADDRESS_COLUMN));
-					return warehouse;
-				}
-			});
-		} catch (EmptyResultDataAccessException e) {
-			logger.info("Empty result");
-		}
-		return warehouse;
-	}
+    public List<Warehouse> findWarehousesWithItems() {
+        return namedParameterJdbcTemplate.query(SQL_FIND_WAREHOUSES_WITH_ITEMS, new ResultSetExtractor<List<Warehouse>>() {
+            public List<Warehouse> extractData(ResultSet rs) throws SQLException, DataAccessException {
+                Map<Long, Warehouse> map = new HashMap<Long, Warehouse>();
+                Warehouse warehouse = null;
+                while (rs.next()) {
+                    Long id = rs.getLong(Warehouse.ID_COLUMN);
+                    warehouse = map.get(id);
+                    if (warehouse == null) {
+                        warehouse = new Warehouse();
+                        warehouse.setId(id);
+                        warehouse.setAddress(rs.getString(Warehouse.ADDRESS_COLUMN));
+                        map.put(id, warehouse);
+                    }
+                    Long itemId = rs.getLong(Item.ALIAS_ID_ITEM_COLUMN);
+                    if (itemId != null) {
+                        Item item = new Item();
+                        item.setId(itemId);
+                        item.setName(rs.getString(Item.NAME_COLUMN));
+                        item.setWarehouseId(rs.getLong(Item.WAREHOUSE_ID_COLUMN));
+                        warehouse.addItem(item);
+                    }
+                }
+                return new ArrayList<Warehouse>(map.values());
+            }
+        });
+    }
 
-	public Long insert(Warehouse warehouse) {
-		SqlParameterSource sqlParameterSource = new MapSqlParameterSource(WarehouseDao.ADDRESS_PARAMETER, warehouse.getAddress());
-		KeyHolder holder = new GeneratedKeyHolder();
-		namedParameterJdbcTemplate.update(PARAMETERIZED_SQL_INSERT, sqlParameterSource, holder);
-		return holder.getKey().longValue();
-	}
+    public Warehouse findById(Long id) {
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource(WarehouseDao.ID_PARAMETER, id);
+        Warehouse warehouse = null;
+        try {
+            warehouse = namedParameterJdbcTemplate.queryForObject(PARAMETERIZED_SQL_FIND_BY_ID, sqlParameterSource, new RowMapper<Warehouse>() {
+                public Warehouse mapRow(ResultSet rs, int arg) throws SQLException {
+                    Warehouse warehouse = new Warehouse();
+                    warehouse.setId(rs.getLong(Warehouse.ID_COLUMN));
+                    warehouse.setAddress(rs.getString(Warehouse.ADDRESS_COLUMN));
+                    return warehouse;
+                }
+            });
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("Empty result");
+        }
+        return warehouse;
+    }
 
-	public void update(Warehouse warehouse) {
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put(WarehouseDao.ID_PARAMETER, warehouse.getId());
-		params.put(WarehouseDao.ADDRESS_PARAMETER, warehouse.getAddress());
-		SqlParameterSource sqlParameterSource = new MapSqlParameterSource(params);
-		namedParameterJdbcTemplate.update(PARAMETERIZED_SQL_UPDATE, sqlParameterSource);		
-	}
+    public Long insert(Warehouse warehouse) {
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource(WarehouseDao.ADDRESS_PARAMETER, warehouse.getAddress());
+        KeyHolder holder = new GeneratedKeyHolder();
+        namedParameterJdbcTemplate.update(PARAMETERIZED_SQL_INSERT, sqlParameterSource, holder);
+        return holder.getKey().longValue();
+    }
 
-	public void delete(Warehouse warehouse) {
-		SqlParameterSource sqlParameterSource = new MapSqlParameterSource(WarehouseDao.ID_PARAMETER, warehouse.getId());
-		namedParameterJdbcTemplate.update(PARAMETERIZED_SQL_DELETE, sqlParameterSource);
-	}
+    public void update(Warehouse warehouse) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put(WarehouseDao.ID_PARAMETER, warehouse.getId());
+        params.put(WarehouseDao.ADDRESS_PARAMETER, warehouse.getAddress());
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource(params);
+        namedParameterJdbcTemplate.update(PARAMETERIZED_SQL_UPDATE, sqlParameterSource);
+    }
+
+    public void delete(Warehouse warehouse) {
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource(WarehouseDao.ID_PARAMETER, warehouse.getId());
+        namedParameterJdbcTemplate.update(PARAMETERIZED_SQL_DELETE, sqlParameterSource);
+    }
 }

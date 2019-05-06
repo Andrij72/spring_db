@@ -4,8 +4,10 @@ import com.myapp.model.Item;
 
 import java.util.List;
 
+import static com.myapp.dao.WarehouseDao.COMMA;
+
 public interface ItemDao {
-	public static final String COMMA= ", ";
+
 	public static final String SQL_FIND_ALL = "SELECT * FROM " + Item.TABLE_NAME;
 	public static final String SQL_FIND_BY_ID = SQL_FIND_ALL + " WHERE " + Item.ID_COLUMN + " = ?";
 	public static final String SQL_FIND_BY_NAME = SQL_FIND_ALL + " WHERE " + Item.NAME_COLUMN + " = ?";

@@ -7,7 +7,7 @@ public class SpringAppTest {
 
     public static void main(String[] args) throws Exception {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring-context.xml");
-         context.getBean(ProviderDaoImpl.class).findById(1l);
+        context.getBean(ProviderDaoImpl.class).findById(1l);
         context.close();
     }
 }

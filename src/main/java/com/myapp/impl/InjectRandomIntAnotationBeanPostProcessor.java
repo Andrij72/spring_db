@@ -15,18 +15,18 @@ public class InjectRandomIntAnotationBeanPostProcessor implements BeanPostProces
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        Field[]  fields = bean.getClass().getDeclaredFields();
-        for(Field field: fields){
-           InjectRandomInt anotation = field.getAnnotation(InjectRandomInt.class);
-           if(anotation != null){
-               int min = anotation.min();
-               int max = anotation.max();
-               Random random = new Random();
-               int i = min * random.nextInt(max-min);
-               field.setAccessible(true);
-               ReflectionUtils.setField(field,bean,i);
+        Field[] fields = bean.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            InjectRandomInt anotation = field.getAnnotation(InjectRandomInt.class);
+            if (anotation != null) {
+                int min = anotation.min();
+                int max = anotation.max();
+                Random random = new Random();
+                int i = min * random.nextInt(max - min);
+                field.setAccessible(true);
+                ReflectionUtils.setField(field, bean, i);
 
-           }
+            }
         }
         return bean;
     }
