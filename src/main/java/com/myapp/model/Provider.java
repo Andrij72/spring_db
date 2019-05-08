@@ -17,7 +17,6 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class Provider {
     public static final String TABLE_NAME = "providers";
-
     public static final String ID_COLUMN = "id";
     public static final String NAME_COLUMN = "name";
 
