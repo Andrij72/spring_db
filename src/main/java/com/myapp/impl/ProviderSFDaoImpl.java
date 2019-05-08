@@ -1,6 +1,5 @@
 package com.myapp.impl;
 
-
 import com.myapp.dao.ProviderSFDao;
 import com.myapp.jdbc.SFNameById;
 import org.springframework.beans.factory.annotation.Autowired;

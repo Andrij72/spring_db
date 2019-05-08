@@ -26,9 +26,7 @@ public class InsertProvider extends SqlUpdate {
         setDataSource(dataSource);
         setSql(PARAMETERIZED_SQL_INSERT_PROVDER);
         declareParameter(new SqlParameter(NAME_PARAMETER, Types.VARCHAR));
-        // Объявляем имя столбца для которого СУРБД генерирует ключ
         setGeneratedKeysColumnNames(new String[]{Provider.ID_COLUMN});
-        // Заставить лежащий в основе драйвер JDBC извлечь сгенерированный ключ
         setReturnGeneratedKeys(true);
     }
 }

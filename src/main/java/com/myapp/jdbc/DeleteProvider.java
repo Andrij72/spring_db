@@ -9,8 +9,9 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.sql.Types;
+import org.springframework.stereotype.Repository;
 
-@Component
+@Repository
 public class DeleteProvider extends SqlUpdate {
     public static final String ID_PARAMETER = "id";
 

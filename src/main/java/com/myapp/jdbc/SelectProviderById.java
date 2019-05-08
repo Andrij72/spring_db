@@ -4,7 +4,7 @@ import com.myapp.model.Provider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.object.MappingSqlQuery;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
@@ -12,7 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 
-@Component
+@Repository
 public class SelectProviderById extends MappingSqlQuery<Provider> {
 	public static final String ID_PARAMETER = "id";
 	private static final String SQL_SELECT_ALL_PROVIDERS_BY_ID = "SELECT * FROM " + Provider.TABLE_NAME + " WHERE " + Provider.ID_COLUMN + " = :" + ID_PARAMETER;

@@ -3,13 +3,13 @@ package com.myapp.jdbc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.object.BatchSqlUpdate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.sql.Types;
 
-@Component
+@Repository
 public class InsertItemProvider extends BatchSqlUpdate {
     public static final String TABLE_NAME = "items_providers";
     public static final String ITEM_ID_COLUMN = "item_id";

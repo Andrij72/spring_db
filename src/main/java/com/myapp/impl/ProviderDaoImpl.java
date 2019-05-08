@@ -1,7 +1,12 @@
 package com.myapp.impl;
 
 import com.myapp.dao.ProviderDao;
-import com.myapp.jdbc.*;
+import com.myapp.jdbc.DeleteProvider;
+import com.myapp.jdbc.InsertItem;
+import com.myapp.jdbc.InsertItem;
+import com.myapp.jdbc.SFNameById;
+import com.myapp.jdbc.SelectProviderById;
+
 import com.myapp.model.Item;
 import com.myapp.model.Provider;
 import com.myapp.model.UpdateProvider;

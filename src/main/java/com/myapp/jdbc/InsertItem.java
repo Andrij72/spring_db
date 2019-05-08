@@ -4,13 +4,13 @@ import com.myapp.model.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.object.BatchSqlUpdate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.sql.Types;
 
-@Component
+@Repository
 public class InsertItem extends BatchSqlUpdate {
     public static final String NAME_PARAMETER = "name";
     private static final String SQL_INSERT_ITEMS = "INSERT INTO " + Item.TABLE_NAME
@@ -27,9 +27,7 @@ public class InsertItem extends BatchSqlUpdate {
         setSql(SQL_INSERT_ITEMS);
         declareParameter(new SqlParameter(NAME_PARAMETER, Types.VARCHAR));
         setBatchSize(BATCH_SIZE);
-        // Объявляем имя столбца для которого СУРБД генерирует ключ
         setGeneratedKeysColumnNames(new String[]{Item.ID_COLUMN});
-        // Заставить лежащий в основе драйвер JDBC извлечь сгенерированный ключ
         setReturnGeneratedKeys(true);
     }
 }
